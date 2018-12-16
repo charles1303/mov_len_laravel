@@ -17,11 +17,15 @@ class RatingsTest extends TestCase
             "noOfRatings" => 200
         ])
             ->assertJsonStructure([
-            '*' => [
-                "avg_rating",
-                "title",
-                "noOfRatings"
-            ]
+                'status',
+                'message',
+                'data' => [
+                        '*' =>  [
+                            "avg_rating",
+                            "title",
+                            "noOfRatings"
+                        ]
+                    ]
         ]);
     }
 
@@ -34,11 +38,15 @@ class RatingsTest extends TestCase
             "title" => "Persuasion (1995)",
             "noOfRatings" => 200
         ])
-            ->assertJsonStructure([
-            '*' => [
-                "avg_rating",
-                "title",
-                "noOfRatings"
+        ->assertJsonStructure([
+            'status',
+            'message',
+            'data' => [
+                '*' =>  [
+                    "avg_rating",
+                    "title",
+                    "noOfRatings"
+                ]
             ]
         ]);
     }
@@ -52,11 +60,15 @@ class RatingsTest extends TestCase
             "title" => "Schindler's List (1993)",
             "noOfRatings" => 200
         ])
-            ->assertJsonStructure([
-            '*' => [
-                "avg_rating",
-                "title",
-                "noOfRatings"
+        ->assertJsonStructure([
+            'status',
+            'message',
+            'data' => [
+                '*' =>  [
+                    "avg_rating",
+                    "title",
+                    "noOfRatings"
+                ]
             ]
         ]);
     }
@@ -67,7 +79,8 @@ class RatingsTest extends TestCase
             ->assertStatus(404)
             ->assertExactJson([
             "message" => "Not Found",
-            "status" => 404
+            "status" => 404,
+            "data" => []
         ]);
     }
     
@@ -77,7 +90,8 @@ class RatingsTest extends TestCase
         ->assertStatus(404)
         ->assertExactJson([
             "message" => "No records found",
-            "status" => 404
+            "status" => 404,
+            "data" => []
         ]);
     }
 
@@ -90,11 +104,15 @@ class RatingsTest extends TestCase
             "title" => "It Happened One Night (1934)",
             "noOfRatings" => 400
         ])
-            ->assertJsonStructure([
-            '*' => [
-                "avg_rating",
-                "title",
-                "noOfRatings"
+        ->assertJsonStructure([
+            'status',
+            'message',
+            'data' => [
+                '*' =>  [
+                    "avg_rating",
+                    "title",
+                    "noOfRatings"
+                ]
             ]
         ]);
     }
@@ -105,7 +123,8 @@ class RatingsTest extends TestCase
             ->assertStatus(404)
             ->assertExactJson([
             "message" => "Not Found",
-            "status" => 404
+            "status" => 404,
+            "data" => []
         ]);
     }
     
@@ -115,7 +134,8 @@ class RatingsTest extends TestCase
         ->assertStatus(404)
         ->assertExactJson([
             "message" => "No records found",
-            "status" => 404
+            "status" => 404,
+            "data" => []
         ]);
     }
 
@@ -125,7 +145,8 @@ class RatingsTest extends TestCase
             ->assertStatus(404)
             ->assertExactJson([
             "message" => "Not Found",
-            "status" => 404
+            "status" => 404,
+            "data" => []
         ]);
     }
 }
