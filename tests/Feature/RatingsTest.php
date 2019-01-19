@@ -1,15 +1,57 @@
 <?php
 namespace Tests\Feature;
 
+use App\Auth\Models\ApiUser;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 
 class RatingsTest extends TestCase
 {
 
+    use DatabaseTransactions;
+    protected $user;
+    protected $headers = [];
+    
+    
+    public function setUp()
+    {
+        parent::setUp();
+        $this->user = factory(ApiUser::class)->create();
+    }
+    
+    public function testWithoutValidTokenShouldReturn401()
+    {
+        $this->headers['Accept'] = 'application/json';
+        $this->get('/api/ratings/paginated', $this->headers)
+        ->assertStatus(401)
+        ->assertExactJson([
+            "message" => "Unauthorized",
+            "status" => 401,
+            "data" => []
+        ]);
+    }
+    
+    public function testWithInvalidTokenScopeShouldReturn403()
+    {
+        $token = $this->user->createToken('TestToken',['ages'])->accessToken;
+        $this->headers['Accept'] = 'application/json';
+        $this->headers['Authorization'] = 'Bearer '.$token;
+        $this->get('/api/ratings/genres/com', $this->headers)
+        ->assertStatus(403)
+        ->assertExactJson([
+            "message" => "Forbidden",
+            "status" => 403,
+            "data" => []
+        ]);
+    }
+    
     public function testLoadPaginatedChartRecords()
     {
-        $this->get('/api/ratings/paginated')
+        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $this->headers['Accept'] = 'application/json';
+        $this->headers['Authorization'] = 'Bearer '.$token;
+        $this->get('/api/ratings/paginated', $this->headers)
             ->assertStatus(200)
             ->assertJsonFragment([
             "avg_rating" => "4.06",
@@ -31,7 +73,10 @@ class RatingsTest extends TestCase
 
     public function testLoadMovieRatings()
     {
-        $this->get('/api/ratings')
+        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $this->headers['Accept'] = 'application/json';
+        $this->headers['Authorization'] = 'Bearer '.$token;
+        $this->get('/api/ratings', $this->headers)
             ->assertStatus(200)
             ->assertJsonFragment([
             "avg_rating" => "4.06",
@@ -53,7 +98,10 @@ class RatingsTest extends TestCase
 
     public function testSearchByAge()
     {
-        $this->get('/api/ratings/ages/56')
+        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $this->headers['Accept'] = 'application/json';
+        $this->headers['Authorization'] = 'Bearer '.$token;
+        $this->get('/api/ratings/ages/56', $this->headers)
             ->assertStatus(200)
             ->assertJsonFragment([
             "avg_rating" => "4.62",
@@ -75,7 +123,10 @@ class RatingsTest extends TestCase
 
     public function testSearchByAgeWithoutAge()
     {
-        $this->get('/api/ratings/ages')
+        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $this->headers['Accept'] = 'application/json';
+        $this->headers['Authorization'] = 'Bearer '.$token;
+        $this->get('/api/ratings/ages', $this->headers)
             ->assertStatus(404)
             ->assertExactJson([
             "message" => "Not Found",
@@ -86,7 +137,10 @@ class RatingsTest extends TestCase
     
     public function testSearchByAgeWithInvalidAge()
     {
-        $this->get('/api/ratings/ages/xx')
+        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $this->headers['Accept'] = 'application/json';
+        $this->headers['Authorization'] = 'Bearer '.$token;
+        $this->get('/api/ratings/ages/xx',$this->headers)
         ->assertStatus(404)
         ->assertExactJson([
             "message" => "No records found",
@@ -97,7 +151,11 @@ class RatingsTest extends TestCase
 
     public function testSearchByGenre()
     {
-        $this->get('/api/ratings/genres/Comedy')
+        
+        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $this->headers['Accept'] = 'application/json';
+        $this->headers['Authorization'] = 'Bearer '.$token;
+        $this->get('/api/ratings/genres/Comedy', $this->headers)
             ->assertStatus(200)
             ->assertJsonFragment([
             "avg_rating" => "4.28",
@@ -119,7 +177,10 @@ class RatingsTest extends TestCase
 
     public function testSearchByGenreWithoutGenre()
     {
-        $this->get('/api/ratings/genres')
+        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $this->headers['Accept'] = 'application/json';
+        $this->headers['Authorization'] = 'Bearer '.$token;
+        $this->get('/api/ratings/genres', $this->headers)
             ->assertStatus(404)
             ->assertExactJson([
             "message" => "Not Found",
@@ -130,7 +191,10 @@ class RatingsTest extends TestCase
     
     public function testSearchByGenreWithInvalidGenre()
     {
-        $this->get('/api/ratings/genres/com')
+        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $this->headers['Accept'] = 'application/json';
+        $this->headers['Authorization'] = 'Bearer '.$token;
+        $this->get('/api/ratings/genres/com', $this->headers)
         ->assertStatus(404)
         ->assertExactJson([
             "message" => "No records found",
@@ -149,4 +213,5 @@ class RatingsTest extends TestCase
             "data" => []
         ]);
     }
+    
 }

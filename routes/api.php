@@ -13,19 +13,36 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('ratings', 'Rating\RatingController@loadMovieRatings');
 
-Route::get('ratings/ages/{ageId}', 'Rating\RatingController@searchByAge');
 
-Route::get('ratings/genres/{genre}', 'Rating\RatingController@searchByGenre');
+Route::post('token', [ 'as' => 'login', 'uses' => 'PassportController@getAccessToken']);
 
-Route::get('ages/{ageId}', 'Age\AgeController@getAgeById');
+Route::get('token', [ 'as' => 'login', 'uses' => 'PassportController@getAccessToken']);
 
-Route::get('movies/genres', 'Movie\MovieController@loadMovieGenres');
+Route::post('register', [ 'as' => 'register', 'uses' => 'PassportController@register']);
 
-Route::get('ratings/paginated', 'Rating\RatingController@loadPaginatedChartRecords');
+Route::get('oauth', [ 'as' => 'oauth', 'uses' => 'PassportController@getOAuthDetails']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('tokenRequest', [ 'as' => 'oauth', 'uses' => 'PassportController@tokenRequest']);
+
+Route::post('assignScope', [ 'as' => 'assignScope', 'uses' => 'PassportController@assignTokenScope']);
+
+
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('user', [ 'as' => 'user', 'uses' => 'PassportController@details'])->middleware('scopes:users');
+    
+    Route::get('ratings', 'Rating\RatingController@loadMovieRatings')->middleware('scopes:ratings');
+    
+    Route::get('ratings/genres/{genre}', 'Rating\RatingController@searchByGenre')->middleware('scopes:ratings');
+    
+    Route::get('ratings/ages/{ageId}', 'Rating\RatingController@searchByAge')->middleware('scopes:ratings');
+    
+    Route::get('ages/{ageId}', 'Age\AgeController@getAgeById')->middleware('scopes:ages');
+    
+    Route::get('movies/genres', 'Movie\MovieController@loadMovieGenres')->middleware('scopes:movies');
+    
+    Route::get('ratings/paginated', 'Rating\RatingController@loadPaginatedChartRecords')->middleware('scopes:ratings');
 });
 

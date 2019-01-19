@@ -7,6 +7,9 @@ use Movie\Providers\MovieRepositoryServiceProvider;
 use App\Providers\ResponseServiceProvider;
 use Rating\Providers\RatingsRepositoryServiceProvider;
 use Rating\Providers\RatingsServiceProvider;
+use Auth\Providers\ApiUserRepositoryServiceProvider;
+use Auth\Providers\ApiUserServiceProvider;
+use Laravel\Passport\PassportServiceProvider;
 
 return [
 
@@ -169,6 +172,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        PassportServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -188,7 +192,10 @@ return [
         MovieRepositoryServiceProvider::class,
         RatingsRepositoryServiceProvider::class,
         RatingsServiceProvider::class,
-        ResponseServiceProvider::class
+        ResponseServiceProvider::class,
+        ApiUserRepositoryServiceProvider::class,
+        ApiUserServiceProvider::class,
+        //App\Providers\CustomPassportServiceProvider::class
 
     ],
 

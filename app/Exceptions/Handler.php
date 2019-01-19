@@ -62,6 +62,7 @@ class Handler extends ExceptionHandler
     private function handleApiException($request, Exception $exception)
     {
         
+        
         $exception = $this->prepareException($exception);
         
         if($exception instanceof MovieLensException){
@@ -70,16 +71,19 @@ class Handler extends ExceptionHandler
         
         if ($exception instanceof HttpResponseException) {
             $exception = $exception->getResponse();
+            
         }
         
         if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
             $exception = $this->unauthenticated($request, $exception);
+            
+            
         }
         
         if ($exception instanceof \Illuminate\Validation\ValidationException) {
             $exception = $this->convertValidationExceptionToResponse($exception, $request);
         }
-        
+       
         return $this->customApiResponse($exception);
     }
     
@@ -109,6 +113,9 @@ class Handler extends ExceptionHandler
         $response = [];
         $response['status'] = $statusCode;
         switch ($statusCode) {
+            case 302:
+                $response['message'] = 'Redirected';
+                break;
             case 401:
                 $response['message'] = 'Unauthorized';
                 break;
