@@ -30,3 +30,17 @@ DB_PASSWORD=
 10. Base URL is default http://127.0.0.1:8000
 
 11. Access the endpoints as shown in the Test cases e.g http://127.0.0.1:8000/api/ratings/ages/56 via Postman, browser or curl command
+
+#Steps to run Implemented Passport security based application
+
+1. Run `composer update or install`
+
+2. Run `php artisan migrate`
+
+3. Run `php artisan passport:install`
+
+4. Run `composer test` to run the tests
+
+5. Run `php artisan serve` to launch application
+
+6. Access endpoints same as before
