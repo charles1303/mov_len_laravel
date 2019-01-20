@@ -62,8 +62,12 @@ class ApiUserService
             
         }
         $user->apiUserTokenScopes()->saveMany($scopeArray);
+        
         $this->removeUserTokenScopes($user->id, array_diff($existingTokenScopeIds,$incomingScopeIds));
-        return $user->with('apiUserTokenScopes')->get();
+        $user::with(['apiUserTokenScopes' => function ($query) use ($user) {
+            $query->where('api_user_id', '=', $user->id);
+        }])->get();
+        return $user;
     }
     
     private function removeUserTokenScopes($userId, array $tokenScopeToRemove){
