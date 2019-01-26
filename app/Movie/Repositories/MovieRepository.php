@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Movie\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
@@ -13,10 +13,12 @@ use Movie\Models\Movie;
 class MovieRepository implements MovieRespositoryInterface
 {
     
+    /**
+     * 
+     * @var Movie
+     */
     protected $movieModel;
 
-    /**
-     */
     public function __construct(Movie $movieModel)
     {
         
@@ -26,9 +28,9 @@ class MovieRepository implements MovieRespositoryInterface
     /**
      * (non-PHPdoc)
      *
-     * @see \Movie\Repositories\MovieRespositoryInterface::loadMovieGenres()
+     * @see \Movie\Repositories\MovieRespositoryInterface::getMovieGenres()
      */
-    public function loadMovieGenres()
+    public function getMovieGenres() : array
     {
         
         $movieGenres = DB::select('select distinct genres from movies');

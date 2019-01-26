@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Rating\Repositories;
 
 /**
@@ -8,11 +8,9 @@ namespace Rating\Repositories;
  */
 interface RatingsRepositoryInterface
 {
-    public function loadPaginatedChartRecords(int $page);
-    public function loadMovieRatings();
-    public function loadChartedRecordsStoredProcCall();
-    public function searchByAge(int $age_id);
-    public function searchByGenre(String $genre);
-    public function searchByGenreAndAge(array $params);
+    public function getPaginatedChartRecords(int $page) : array;
+    public function getMovieRatings() : array;
+    public function searchByAge(int $age_id) : array;
+    public function searchByGenre(string $genre) : array;
 }
 

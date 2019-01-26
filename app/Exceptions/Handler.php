@@ -62,7 +62,6 @@ class Handler extends ExceptionHandler
     private function handleApiException($request, Exception $exception)
     {
         
-        
         $exception = $this->prepareException($exception);
         
         if($exception instanceof MovieLensException){
@@ -115,6 +114,9 @@ class Handler extends ExceptionHandler
         switch ($statusCode) {
             case 302:
                 $response['message'] = 'Redirected';
+                break;
+            case 400:
+                $response['message'] = 'Invalid Parameters';
                 break;
             case 401:
                 $response['message'] = 'Unauthorized';

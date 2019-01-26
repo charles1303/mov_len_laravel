@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Movie\Repositories;
 
 /**
@@ -8,6 +8,6 @@ namespace Movie\Repositories;
  */
 interface MovieRespositoryInterface
 {
-    public function loadMovieGenres();
+    public function getMovieGenres() : array;
 }
 

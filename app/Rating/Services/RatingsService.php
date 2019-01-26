@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Rating\Services;
 
 use Illuminate\Support\Facades\Log;
@@ -12,45 +12,47 @@ use Rating\Repositories\RatingsRepositoryInterface;
 class RatingsService
 {
 
+    /**
+     * 
+     * @var RatingsRepositoryInterface
+     */
     protected $ratingsRepo;
     
-    /**
-     */
     public function __construct(RatingsRepositoryInterface $ratingsRepo)
     {
         
         $this->ratingsRepo = $ratingsRepo;
     }
     
-    public function loadPaginatedChartRecords(){
+    public function getPaginatedChartRecords() : array{
         
         Log::channel('daily')->info('Loading paginated movie ratings from RatingsService loadPaginatedChartRecords method....');
-        $ratings = $this->ratingsRepo->loadPaginatedChartRecords(1);
+        $ratings = $this->ratingsRepo->getPaginatedChartRecords(1);
         return $this->sortMovieRatings($ratings);
     }
     
-    public function loadMovieRatings()
+    public function getMovieRatings() : array
     {
         Log::channel('daily')->info('Loading paginated movie ratings from RatingsService loadMovieRatings method....');
-        $ratings = $this->ratingsRepo->loadMovieRatings();
+        $ratings = $this->ratingsRepo->getMovieRatings();
         return $this->sortMovieRatings($ratings);
     }
     
-    public function searchByAge($ageId)
+    public function searchByAge(int $ageId) : array
     {
         Log::channel('daily')->info('Loading paginated movie ratings from RatingsService searchByAge method by age Id ' . $ageId);
         $ratings = $this->ratingsRepo->searchByAge($ageId);
         return $this->sortMovieRatings($ratings);
     }
     
-    public function searchByGenre($genre)
+    public function searchByGenre(string $genre) : array
     {
         Log::channel('daily')->info('Loading paginated movie ratings from RatingsService searchByGenre method by genre ' . $genre);
         $ratings = $this->ratingsRepo->searchByGenre($genre);
         return $this->sortMovieRatings($ratings);
     }
     
-    public function sortMovieRatings($movieRatings)
+    public function sortMovieRatings(array $movieRatings) : array
     {
         Log::channel('daily')->info('Sorting movie ratings from RatingsService sortMovieRatings method....size ' .count($movieRatings));
         if(isset($movieRatings) && is_array($movieRatings) && count($movieRatings) > 0){

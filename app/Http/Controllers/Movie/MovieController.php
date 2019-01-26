@@ -8,6 +8,11 @@ use Movie\Services\MovieService;
 
 class MovieController extends Controller
 {
+    
+    /**
+     * 
+     * @var MovieService
+     */
     protected $movieService;
     
     public function __construct(MovieService $movieService){
@@ -15,9 +20,7 @@ class MovieController extends Controller
         
     }
     
-    public function loadMovieGenres(Request $request){
-        //$output = new \Symfony\Component\Console\Output\ConsoleOutput();
-        //$output->writeln('hello in movie controller...');
-        return response()->api($this->movieService->loadMovieGenres());
+    public function getMovieGenres(Request $request){
+        return response()->api($this->movieService->getMovieGenres());
     }
 }

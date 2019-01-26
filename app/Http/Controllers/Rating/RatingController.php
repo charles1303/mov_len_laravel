@@ -14,33 +14,35 @@ use Rating\Services\RatingsService;
 class RatingController extends Controller
 {
 
-    protected $ratingService;   
     /**
+     * 
+     * @var RatingsService
      */
+    protected $ratingService;   
     public function __construct(RatingsService $ratingService)
     {
         
         $this->ratingService = $ratingService;
     }
     
-    public function loadPaginatedChartRecords(Request $request){
+    public function getPaginatedChartRecords(Request $request){
         Log::channel('daily')->info('Loading paginated movie ratings from RatingController loadPaginatedChartRecords method....');
-        return response()->api($this->ratingService->loadPaginatedChartRecords());
+        return response()->api($this->ratingService->getPaginatedChartRecords());
     }
     
-    public function loadMovieRatings()
+    public function getMovieRatings()
     {
         Log::channel('daily')->info('Loading movie ratings from RatingController loadMovieRatings method....');
-        return response()->api($this->ratingService->loadMovieRatings());
+        return response()->api($this->ratingService->getMovieRatings());
     }
     
-    public function searchByAge($ageId)
+    public function searchByAge(int $ageId)
     {
         Log::channel('daily')->info('Search movie ratings from RatingController searchByAge method by age....' . $ageId);
         return response()->api($this->ratingService->searchByAge($ageId));
     }
     
-    public function searchByGenre($genre)
+    public function searchByGenre(string $genre)
     {
         Log::channel('daily')->info('Search movie ratings from RatingController searchByGenre method by genre....' . $genre);
         return response()->api($this->ratingService->searchByGenre($genre));

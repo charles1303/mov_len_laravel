@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Auth\Repositories;
 
 use App\Auth\Models\ApiUser;
@@ -14,15 +15,13 @@ class ApiUserRepository implements ApiUserRepositoryInterface
 
     protected $apiUser;
     
-    /**
-     */
     public function __construct(ApiUser $apiUser)
     {
         
         $this->apiUser = $apiUser;
     }
     
-    public function loadOrmApiUser(string $username)
+    public function getOrmApiUser(string $username): ?ApiUser
     {
         $user = ApiUser::where('email', $username)
         ->first();
@@ -30,7 +29,7 @@ class ApiUserRepository implements ApiUserRepositoryInterface
         return $user;
     }
     
-    public function loadOrmTokenScope(string $name)
+    public function getOrmTokenScope(string $name): ?TokenScope
     {
         $user = TokenScope::where('name', $name)
         ->first();

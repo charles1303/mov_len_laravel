@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Movie\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -12,8 +12,6 @@ use Movie\Services\MovieService;
 class MovieServiceProvider extends ServiceProvider
 {
 
-    // TODO - Insert your code here
-    
     /**
      *
      * @param \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application $app
@@ -30,7 +28,6 @@ class MovieServiceProvider extends ServiceProvider
         $this->app->bind('Movie\Services\MovieService', function($app)
         {
             return new MovieService(
-                // Inject in our class of ageInterface, this will be our repository
                 $app->make('Movie\Repositories\MovieRepository')
                 );
         });

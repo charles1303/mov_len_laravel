@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Auth\Services;
 
 use App\Auth\Models\ApiUser;
@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Auth\Pojos\ApiUserPojo;
 use Exceptions\NoRecordFoundException;
 use App\Auth\Models\ApiUserTokenScope;
+use function GuzzleHttp\json_encode;
 
 /**
  *
@@ -16,18 +17,18 @@ use App\Auth\Models\ApiUserTokenScope;
  */
 class ApiUserService
 {
-
+    /*
+     * @var ApiUserRepositoryInterface
+     */
     protected $apiUserRepo;
     
-    /**
-     */
     public function __construct(ApiUserRepositoryInterface $apiUserRepo)
     {
         
         $this->apiUserRepo = $apiUserRepo;
     }
     
-    public function registerUser(ApiUserPojo $apiUserPojo){
+    public function registerUser(ApiUserPojo $apiUserPojo) : ?ApiUser{
         $apiUser = ApiUser::create([
             'name' => $apiUserPojo->name,
             'email' => $apiUserPojo->email,
@@ -37,19 +38,19 @@ class ApiUserService
         return $apiUser;
     }
     
-    public function assignTokenScope(string $email, array $tokenScopeNames){
-        $user = $this->apiUserRepo->loadOrmApiUser($email);
+    public function assignTokenScope(string $email, array $tokenScopeNames) : ?ApiUser{
+        $user = $this->apiUserRepo->getOrmApiUser($email);
         if(!$user){
             throw new NoRecordFoundException("User does not exist!");
         }
         $userTokenScopeArr = $user->apiUserTokenScopes;
         
-        $existingTokenScopeIds = $this->getExistingUserTokenScopeIds($userTokenScopeArr);
+        $existingTokenScopeIds = $this->getExistingUserTokenScopeIds(json_encode($userTokenScopeArr));
         
         $scopeArray = array();
         $incomingScopeIds = array();
         foreach ($tokenScopeNames as $scopeName){
-            $tokenScope = $this->apiUserRepo->loadOrmTokenScope($scopeName);
+            $tokenScope = $this->apiUserRepo->getOrmTokenScope($scopeName);
             $incomingScopeIds[] = $tokenScope->id;
             if (in_array($tokenScope->id, $existingTokenScopeIds)) {
                 continue;
@@ -70,15 +71,15 @@ class ApiUserService
         return $user;
     }
     
-    private function removeUserTokenScopes($userId, array $tokenScopeToRemove){
+    private function removeUserTokenScopes(int $userId, array $tokenScopeToRemove){
         ApiUserTokenScope::where('api_user_id', '=', $userId)
         ->whereIn('token_scope_id', $tokenScopeToRemove)
         ->delete();
     }
     
-    private function loadOrmApiUser(string $username, string $password)
+    private function getOrmApiUser(string $username, string $password) : ?ApiUser
     {
-        $user = $this->apiUserRepo->loadOrmApiUser($username);
+        $user = $this->apiUserRepo->getOrmApiUser($username);
         
         if( Hash::check( $password, $user['password']) == false) {
             $user = null;
@@ -87,15 +88,15 @@ class ApiUserService
         return $user;
     }
     
-    public function getAccessToken(string $email, string $password)
+    public function getAccessToken(string $email, string $password) : object
     {
-        $user = $this->loadOrmApiUser($email, $password);
+        $user = $this->getOrmApiUser($email, $password);
         
         if($user){
             $scopes = array();
             $userTokenScopes = $user->apiUserTokenScopes;
             
-            $existingTokenScopeIds = $this->getExistingUserTokenScopeIds($userTokenScopes);
+            $existingTokenScopeIds = $this->getExistingUserTokenScopeIds(json_encode($userTokenScopes));
             
             $scopes = $this->getScopeNames($existingTokenScopeIds);
             $token = $this->generateToken($user,'movieLens',$scopes);
@@ -105,7 +106,7 @@ class ApiUserService
         }
     }
     
-    public function generateToken(ApiUser $apiUser, string $tokenName, array $scopes)
+    public function generateToken(ApiUser $apiUser, string $tokenName, array $scopes) : object
     {
         return $apiUser->createToken($tokenName,$scopes);
     }
@@ -113,7 +114,7 @@ class ApiUserService
      * @param scopes
      * @param existingTokenScopeIds
      * @param scopes
-     */private function getScopeNames($existingTokenScopeIds)
+     */private function getScopeNames(array $existingTokenScopeIds) : array
     {
         $tokenScopes = TokenScope::whereIn('id', $existingTokenScopeIds)
         ->get();
@@ -126,7 +127,7 @@ class ApiUserService
     }
 
     
-    private function getExistingUserTokenScopeIds($userTokenScopeArr){
+    private function getExistingUserTokenScopeIds(string $userTokenScopeArr) : array{
         $existingTokenScopes = json_decode($userTokenScopeArr, true);
         
         return array_map(function($existingTokenScopes) {

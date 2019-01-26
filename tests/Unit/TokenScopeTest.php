@@ -15,7 +15,6 @@ use Auth\Repositories\ApiUserRepository;
 
 class TokenScopeTest extends TestCase
 {
-    
     use DatabaseTransactions;
     protected $user;
     protected $headers = [];
@@ -29,13 +28,13 @@ class TokenScopeTest extends TestCase
         
         $tokenScopeTypes = ["ratings","movies","ages"];
         
-        $this->tokenScopeTypes = factory(TokenScope::class, count($tokenScopeTypes))->make()->each(function($ts) {
+        $this->tokenScopeTypes = factory(TokenScope::class, count($tokenScopeTypes))->make()->each(function ($ts) {
             return $ts->save();
         });
-            
     }
     
-    public function testTokenScopeGeneratedIsSameAsAssignedToUser(){
+    public function testTokenScopeGeneratedIsSameAsAssignedToUser()
+    {
         $apiUserTokenScope = new ApiUserTokenScope();
         
         $tokenScope = TokenScope::whereIn('name', $this->tokenScopeTypes)->first();
@@ -48,22 +47,20 @@ class TokenScopeTest extends TestCase
         $token = $this->apiUserService->generateToken($this->user, 'TestToken', [$tokenScope->name]);
         
         $this->assertTrue($this->arrays_are_similar($token->token->scopes, [$tokenScope->name]));
-        
-        
     }
     
-    private function arrays_are_similar($firstArray, $secondArray) {
+    private function arrays_are_similar($firstArray, $secondArray)
+    {
         sort($firstArray);
         sort($secondArray);
         if (count(array_diff_assoc($firstArray, $secondArray))) {
             return false;
         }
-        foreach($firstArray as $key => $val) {
+        foreach ($firstArray as $key => $val) {
             if ($val !== $secondArray[$key]) {
                 return false;
             }
         }
         return true;
     }
-    
 }

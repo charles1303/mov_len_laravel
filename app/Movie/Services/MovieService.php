@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Movie\Services;
 
 use Movie\Repositories\MovieRespositoryInterface;
@@ -11,19 +11,21 @@ use Movie\Repositories\MovieRespositoryInterface;
 class MovieService
 {
 
+    /**
+     * 
+     * @var MovieRespositoryInterface
+     */
     protected $movieRepo;
     
-    /**
-     */
     public function __construct(MovieRespositoryInterface $movieRepo)
     {
         
        $this->movieRepo = $movieRepo;
     }
     
-    public function loadMovieGenres()
+    public function getMovieGenres() : array
     {
-        return $this->movieRepo->loadMovieGenres();
+        return $this->movieRepo->getMovieGenres();
     }
 }
 

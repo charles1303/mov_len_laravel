@@ -21,19 +21,13 @@ Route::get('token', [ 'as' => 'login', 'uses' => 'PassportController@getAccessTo
 
 Route::post('register', [ 'as' => 'register', 'uses' => 'PassportController@register']);
 
-Route::get('oauth', [ 'as' => 'oauth', 'uses' => 'PassportController@getOAuthDetails']);
-
 Route::get('tokenRequest', [ 'as' => 'oauth', 'uses' => 'PassportController@tokenRequest']);
 
 Route::post('assignScope', [ 'as' => 'assignScope', 'uses' => 'PassportController@assignTokenScope']);
 
 
-
-
 Route::middleware('auth:api')->group(function () {
-    Route::get('user', [ 'as' => 'user', 'uses' => 'PassportController@details'])->middleware('scopes:users');
-    
-    Route::get('ratings', 'Rating\RatingController@loadMovieRatings')->middleware('scopes:ratings');
+    Route::get('ratings', 'Rating\RatingController@getMovieRatings')->middleware('scopes:ratings');
     
     Route::get('ratings/genres/{genre}', 'Rating\RatingController@searchByGenre')->middleware('scopes:ratings');
     
@@ -41,8 +35,8 @@ Route::middleware('auth:api')->group(function () {
     
     Route::get('ages/{ageId}', 'Age\AgeController@getAgeById')->middleware('scopes:ages');
     
-    Route::get('movies/genres', 'Movie\MovieController@loadMovieGenres')->middleware('scopes:movies');
+    Route::get('movies/genres', 'Movie\MovieController@getMovieGenres')->middleware('scopes:movies');
     
-    Route::get('ratings/paginated', 'Rating\RatingController@loadPaginatedChartRecords')->middleware('scopes:ratings');
+    Route::get('ratings/paginated', 'Rating\RatingController@getPaginatedChartRecords')->middleware('scopes:ratings');
 });
 

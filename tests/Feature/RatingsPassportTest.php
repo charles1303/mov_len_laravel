@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Feature;
 
-
 use App\Auth\Models\ApiUser;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -12,11 +11,10 @@ use App\Auth\Models\ApiUserTokenScope;
 /**
  *
  * @author charles
- *        
+ *
  */
 class RatingsPassportTest extends TestCase
 {
-
     use DatabaseTransactions;
     protected $user;
     protected $headers = [];
@@ -25,12 +23,11 @@ class RatingsPassportTest extends TestCase
         parent::setUp();
        
         $this->user = factory(ApiUser::class)->create();
-        
     }
     
     public function testRatingsReturns200()
     {
-        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ratings'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         
@@ -54,17 +51,16 @@ class RatingsPassportTest extends TestCase
         ]);
     }
     
-    function arrays_are_similar($firstArray, $secondArray) {
+    public function arrays_are_similar($firstArray, $secondArray)
+    {
         if (count(array_diff_assoc($firstArray, $secondArray))) {
             return false;
         }
-        foreach($firstArray as $key => $val) {
+        foreach ($firstArray as $key => $val) {
             if ($val !== $secondArray[$key]) {
                 return false;
             }
         }
         return true;
     }
-    
 }
-

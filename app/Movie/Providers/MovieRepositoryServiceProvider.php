@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Movie\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -26,7 +26,6 @@ class MovieRepositoryServiceProvider extends ServiceProvider
     
     public function register()
     {
-        // Bind the returned class to the namespace 'Movie\Repositories\MovieRepositoryInterface
         $this->app->bind('Movie\Repositories\MovieRepositoryInterface', function($app)
         {
             return new MovieRepository(new Movie());

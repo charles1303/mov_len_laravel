@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Auth\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -11,9 +11,6 @@ use Auth\Services\ApiUserService;
  */
 class ApiUserServiceProvider extends ServiceProvider
 {
-
-    // TODO - Insert your code here
-    
     /**
      *
      * @param \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application $app
@@ -27,7 +24,6 @@ class ApiUserServiceProvider extends ServiceProvider
     
     public function register()
     {
-        // Bind the returned class to the namespace 'Auth\Services\ApiUserService
         $this->app->bind('Auth\Services\ApiUserService', function($app)
         {
             return new ApiUserService(

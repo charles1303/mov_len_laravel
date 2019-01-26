@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Rating\Repositories;
 
 use Exceptions\QueryException;
@@ -17,30 +17,11 @@ class RatingsRepository implements RatingsRepositoryInterface
     private const NUM_OF_RECS_PER_PAGE = 20;
 
     /**
-     */
-    public function __construct()
-    {
-        
-        // TODO - Insert your code here
-    }
-
-    /**
-     * (non-PHPdoc)
-     *
-     * @see \Rating\Repositories\RatingsRepositoryInterface::searchByGenreAndAge()
-     */
-    public function searchByGenreAndAge(array $params)
-    {
-        
-        // TODO - Insert your code here
-    }
-
-    /**
      * (non-PHPdoc)
      *
      * @see \Rating\Repositories\RatingsRepositoryInterface::loadMovieRatings()
      */
-    public function loadMovieRatings()
+    public function getMovieRatings() : array
     {
         try {
             $sql = <<<'EOT'
@@ -69,23 +50,12 @@ EOT;
         return $data;
     }
 
-    /**
-     * (non-PHPdoc)
-     *
-     * @see \Rating\Repositories\RatingsRepositoryInterface::loadChartedRecordsStoredProcCall()
-     */
-    public function loadChartedRecordsStoredProcCall()
-    {
-        
-        // TODO - Insert your code here
-    }
-
-    /**
+   /**
      * (non-PHPdoc)
      *
      * @see \Rating\Repositories\RatingsRepositoryInterface::searchByAge()
      */
-    public function searchByAge($ageId) 
+    public function searchByAge(int $ageId) : array
     {
         $data = [];
         $sql = <<<EOT
@@ -129,7 +99,7 @@ EOT;
      *
      * @see \Rating\Repositories\RatingsRepositoryInterface::searchByGenre()
      */
-    public function searchByGenre($genre)
+    public function searchByGenre(string $genre) : array
     {
         
         $data = [];
@@ -173,7 +143,7 @@ EOT;
      *
      * @see \Rating\Repositories\RatingsRepositoryInterface::loadPaginatedChartRecords()
      */
-    public function loadPaginatedChartRecords($page)
+    public function getPaginatedChartRecords(int $page) : array
     {
         $data = [];
         $recordIndex = $page * self::NUM_OF_RECS_PER_PAGE;
@@ -202,7 +172,7 @@ EOT;
         return $data;
     }
 
-    private function prepareRatingsData($result)
+    private function prepareRatingsData(array $result) : array
     {
         $data = [];
         try {

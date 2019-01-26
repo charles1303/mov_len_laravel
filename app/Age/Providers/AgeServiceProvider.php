@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Age\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -12,8 +12,6 @@ use Age\Services\AgeService;
 class AgeServiceProvider extends ServiceProvider
 {
 
-    // TODO - Insert your code here
-    
     /**
      *
      * @param \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application $app
@@ -26,12 +24,10 @@ class AgeServiceProvider extends ServiceProvider
     
     public function register()
     {
-        // Bind the returned class to the namespace 'Age\Services\AgeService
         $this->app->bind('Age\Services\AgeService', function($app)
         {
             return new AgeService(
-                // Inject in our class of ageInterface, this will be our repository
-                $app->make('Age\Repositories\AgeInterface')
+                $app->make('Age\Repositories\AgeRepositoryInterface')
                 );
         });
     }

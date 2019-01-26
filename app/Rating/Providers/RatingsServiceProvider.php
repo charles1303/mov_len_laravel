@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Rating\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -12,8 +12,6 @@ use Rating\Services\RatingsService;
 class RatingsServiceProvider extends ServiceProvider
 {
 
-    // TODO - Insert your code here
-    
     /**
      *
      * @param \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application $app
@@ -26,7 +24,6 @@ class RatingsServiceProvider extends ServiceProvider
     
     public function register()
     {
-        // Bind the returned class to the namespace 'Rating\Services\RatingsService
         $this->app->bind('Rating\Services\RatingsService', function($app)
         {
             return new RatingsService(

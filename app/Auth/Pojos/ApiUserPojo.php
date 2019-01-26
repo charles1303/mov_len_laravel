@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Auth\Pojos;
 
 /**
@@ -9,11 +9,6 @@ namespace Auth\Pojos;
 class ApiUserPojo
 {
 
-    // TODO - Insert your code here
-    
-    /**
-     */
-    
     public $name;
     
     public $email;
@@ -24,9 +19,6 @@ class ApiUserPojo
     
     
     public function __construct()
-    {
-        
-        // TODO - Insert your code here
-    }
+    {}
 }
 

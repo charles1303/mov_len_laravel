@@ -1,5 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 namespace Auth\Repositories;
+
+use App\Auth\Models\ApiUser;
+use App\Auth\Models\TokenScope;
 
 /**
  *
@@ -8,8 +11,8 @@ namespace Auth\Repositories;
  */
 interface ApiUserRepositoryInterface
 {
-    public function loadOrmApiUser(string $username);
+    public function getOrmApiUser(string $username) : ?ApiUser;
     
-    public function loadOrmTokenScope(string $name);
+    public function getOrmTokenScope(string $name) : ?TokenScope;
 }
 

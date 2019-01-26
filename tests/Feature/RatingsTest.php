@@ -5,10 +5,8 @@ use App\Auth\Models\ApiUser;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-
 class RatingsTest extends TestCase
 {
-
     use DatabaseTransactions;
     protected $user;
     protected $headers = [];
@@ -34,7 +32,7 @@ class RatingsTest extends TestCase
     
     public function testWithInvalidTokenScopeShouldReturn403()
     {
-        $token = $this->user->createToken('TestToken',['ages'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ages'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         $this->get('/api/ratings/genres/com', $this->headers)
@@ -48,7 +46,7 @@ class RatingsTest extends TestCase
     
     public function testLoadPaginatedChartRecords()
     {
-        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ratings'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         $this->get('/api/ratings/paginated', $this->headers)
@@ -73,7 +71,7 @@ class RatingsTest extends TestCase
 
     public function testLoadMovieRatings()
     {
-        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ratings'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         $this->get('/api/ratings', $this->headers)
@@ -98,7 +96,7 @@ class RatingsTest extends TestCase
 
     public function testSearchByAge()
     {
-        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ratings'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         $this->get('/api/ratings/ages/56', $this->headers)
@@ -123,7 +121,7 @@ class RatingsTest extends TestCase
 
     public function testSearchByAgeWithoutAge()
     {
-        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ratings'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         $this->get('/api/ratings/ages', $this->headers)
@@ -137,10 +135,10 @@ class RatingsTest extends TestCase
     
     public function testSearchByAgeWithInvalidAge()
     {
-        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ratings'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
-        $this->get('/api/ratings/ages/xx',$this->headers)
+        $this->get('/api/ratings/ages/xx', $this->headers)
         ->assertStatus(404)
         ->assertExactJson([
             "message" => "No records found",
@@ -151,8 +149,7 @@ class RatingsTest extends TestCase
 
     public function testSearchByGenre()
     {
-        
-        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ratings'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         $this->get('/api/ratings/genres/Comedy', $this->headers)
@@ -177,7 +174,7 @@ class RatingsTest extends TestCase
 
     public function testSearchByGenreWithoutGenre()
     {
-        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ratings'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         $this->get('/api/ratings/genres', $this->headers)
@@ -191,7 +188,7 @@ class RatingsTest extends TestCase
     
     public function testSearchByGenreWithInvalidGenre()
     {
-        $token = $this->user->createToken('TestToken',['ratings'])->accessToken;
+        $token = $this->user->createToken('TestToken', ['ratings'])->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         $this->get('/api/ratings/genres/com', $this->headers)
@@ -213,5 +210,4 @@ class RatingsTest extends TestCase
             "data" => []
         ]);
     }
-    
 }

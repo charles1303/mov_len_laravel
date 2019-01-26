@@ -1,29 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 namespace Age\Services;
 
-use Age\Repositories\AgeInterface;
+use Age\Repositories\AgeRepositoryInterface;
 
 /**
  *
  * @author charles
- *        
+ *
  */
 class AgeService
 {
-
+    /*
+     * @var AgeRepositoryInterface
+     */
     protected $ageRepo;
     
-    /**
-     */
-    public function __construct(AgeInterface $ageRepo)
+    public function __construct(AgeRepositoryInterface $ageRepo)
     {
         $this->ageRepo = $ageRepo;
     }
     
-    public function getAgeById($ageId){
-        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $output->writeln('hello in services');
+    public function getAgeById(int $ageId) : object
+    {
         return $this->ageRepo->getAgeById($ageId);
     }
 }
-

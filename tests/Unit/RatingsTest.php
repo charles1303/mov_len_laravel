@@ -6,16 +6,10 @@ use Tests\TestCase;
 
 class RatingsTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    
     protected $ratingService;
     
-    public function setUp() {
-        
+    public function setUp()
+    {
         parent::setUp();
         
         $this->ratingService = $this->app->make('Rating\Services\RatingsService');
@@ -129,8 +123,8 @@ class RatingsTest extends TestCase
     }
 ]';
         
-        $expectedValue = json_decode($expectedValue); 
-        $testValue = json_decode($testValue); 
+        $expectedValue = json_decode($expectedValue);
+        $testValue = json_decode($testValue);
         
         $actualValue = $this->ratingService->sortMovieRatings($testValue);
         
