@@ -7,7 +7,7 @@ use Rating\Services\RatingsService;
 /**
  *
  * @author charles
- *        
+ *
  */
 class RatingsServiceProvider extends ServiceProvider
 {
@@ -24,8 +24,7 @@ class RatingsServiceProvider extends ServiceProvider
     
     public function register()
     {
-        $this->app->bind('Rating\Services\RatingsService', function($app)
-        {
+        $this->app->bind('Rating\Services\RatingsService', function ($app) {
             return new RatingsService(
                 
                 $app->make('Rating\Repositories\RatingsRepositoryInterface')
@@ -33,4 +32,3 @@ class RatingsServiceProvider extends ServiceProvider
         });
     }
 }
-

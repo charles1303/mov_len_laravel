@@ -3,17 +3,17 @@ namespace Rating\Repositories;
 
 use Exceptions\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Exceptions\GeneralException;
 use Exceptions\NoRecordFoundException;
 
 /**
  *
  * @author charles
- *        
+ *
  */
 class RatingsRepository implements RatingsRepositoryInterface
 {
-
     private const NUM_OF_RECS_PER_PAGE = 20;
 
     /**
@@ -23,26 +23,27 @@ class RatingsRepository implements RatingsRepositoryInterface
      */
     public function getMovieRatings() : array
     {
+        Log::channel('daily')->info('Fetching getMovieRatings from DB.....');
         try {
             $sql = <<<'EOT'
             select ROUND((totalRatings/noOfRatings),2) as avg_rating, m.title, noOfRatings from
             (select sum(rating) as totalRatings, count(movie_id) as noOfRatings, movie_id from ratings r
             GROUP BY movie_id
-            HAVING noOfRatings > 20
-            LIMIT 100) as T
+            HAVING noOfRatings > 20) as T
             join movies m on T.movie_id = m.id
             ORDER BY avg_rating desc
+            LIMIT 100
 EOT;
             
             $result = DB::select($sql);
-            if(count($result) < 1){
+            if (count($result) < 1) {
                 throw new NoRecordFoundException("No records found");
             }
             $data = $this->prepareRatingsData($result);
         } catch (\Exception $e) {
-            if($e instanceof NoRecordFoundException){
+            if ($e instanceof NoRecordFoundException) {
                 throw $e;
-            }else{
+            } else {
                 throw new QueryException("Error Executing Query");
             }
         }
@@ -50,13 +51,14 @@ EOT;
         return $data;
     }
 
-   /**
-     * (non-PHPdoc)
-     *
-     * @see \Rating\Repositories\RatingsRepositoryInterface::searchByAge()
-     */
+    /**
+      * (non-PHPdoc)
+      *
+      * @see \Rating\Repositories\RatingsRepositoryInterface::searchByAge()
+      */
     public function searchByAge(int $ageId) : array
     {
+        Log::channel('daily')->info('Fetching searchByAge from DB.....');
         $data = [];
         $sql = <<<EOT
             select ROUND((totalRatings/noOfRatings),2) as avg_rating, m.title, noOfRatings from(
@@ -69,27 +71,26 @@ EOT;
                 ) as U join ratings r ON
             U.user_id = r.user_id
             GROUP BY movie_id
-            HAVING noOfRatings > 20
-            LIMIT 100) as T
+            HAVING noOfRatings > 20) as T
             join movies m on T.movie_id = m.id
             ORDER BY avg_rating desc
+            LIMIT 100
 EOT;
         try {
             $result = DB::select($sql, [
                 $ageId
             ]);
             
-            if(count($result) < 1){
+            if (count($result) < 1) {
                 throw new NoRecordFoundException("No records found");
             }
             $data = $this->prepareRatingsData($result);
         } catch (\Exception $e) {
-            if($e instanceof NoRecordFoundException){
+            if ($e instanceof NoRecordFoundException) {
                 throw $e;
-            }else{
+            } else {
                 throw new QueryException("Error Executing Query");
             }
-            
         }
         return $data;
     }
@@ -101,6 +102,7 @@ EOT;
      */
     public function searchByGenre(string $genre) : array
     {
+        Log::channel('daily')->info('Fetching searchByGenre from DB.....');
         
         $data = [];
         $sql = <<<EOT
@@ -113,24 +115,23 @@ EOT;
             M.movie_id = r.movie_id
             where M.genres = ?
             GROUP BY movie_id
-            HAVING noOfRatings > 20
-            LIMIT 100) as T
-            
+            HAVING noOfRatings > 20) as T
             ORDER BY avg_rating desc
+            LIMIT 100
 EOT;
         
         try {
             $result = DB::select($sql, [
                 $genre
             ]);
-            if(count($result) < 1){
+            if (count($result) < 1) {
                 throw new NoRecordFoundException("No records found");
             }
             $data = $this->prepareRatingsData($result);
         } catch (\Exception $e) {
-            if($e instanceof NoRecordFoundException){
+            if ($e instanceof NoRecordFoundException) {
                 throw $e;
-            }else{
+            } else {
                 throw new QueryException("Error Executing Query");
             }
         }
@@ -145,27 +146,29 @@ EOT;
      */
     public function getPaginatedChartRecords(int $page) : array
     {
+        Log::channel('daily')->info('Fetching getPaginatedChartRecords from DB.....');
         $data = [];
-        $recordIndex = $page * self::NUM_OF_RECS_PER_PAGE;
+        $pageSize = self::NUM_OF_RECS_PER_PAGE;
+        $startIndex = ($page * self::NUM_OF_RECS_PER_PAGE) - self::NUM_OF_RECS_PER_PAGE;
         try {
             $sql = <<<EOT
             select ROUND((totalRatings/noOfRatings),2) as avg_rating, m.title, noOfRatings from
             (select sum(rating) as totalRatings, count(movie_id) as noOfRatings, movie_id from ratings r
             GROUP BY movie_id
-            HAVING noOfRatings > 20
-            LIMIT $recordIndex, 10) as T
+            HAVING noOfRatings > 20) as T
             join movies m on T.movie_id = m.id
             ORDER BY avg_rating desc
+            LIMIT $startIndex , $pageSize
 EOT;
             $result = DB::select($sql);
-            if(count($result) < 1){
+            if (count($result) < 1) {
                 throw new NoRecordFoundException("No records found");
             }
             $data = $this->prepareRatingsData($result);
         } catch (\Exception $e) {
-            if($e instanceof NoRecordFoundException){
+            if ($e instanceof NoRecordFoundException) {
                 throw $e;
-            }else{
+            } else {
                 throw new QueryException("Error Executing Query");
             }
         }
@@ -190,4 +193,3 @@ EOT;
         return $data;
     }
 }
-

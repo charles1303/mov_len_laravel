@@ -8,7 +8,7 @@ use Movie\Models\Movie;
 /**
  *
  * @author charles
- *        
+ *
  */
 class MovieRepositoryServiceProvider extends ServiceProvider
 {
@@ -26,10 +26,8 @@ class MovieRepositoryServiceProvider extends ServiceProvider
     
     public function register()
     {
-        $this->app->bind('Movie\Repositories\MovieRepositoryInterface', function($app)
-        {
+        $this->app->bind('Movie\Repositories\MovieRepositoryInterface', function ($app) {
             return new MovieRepository(new Movie());
         });
     }
 }
-

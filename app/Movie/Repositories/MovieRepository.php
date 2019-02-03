@@ -3,26 +3,26 @@ namespace Movie\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Movie\Models\Movie;
 
 /**
  *
  * @author charles
- *        
+ *
  */
 class MovieRepository implements MovieRespositoryInterface
 {
     
     /**
-     * 
+     *
      * @var Movie
      */
     protected $movieModel;
 
     public function __construct(Movie $movieModel)
     {
-        
-       $this->movieModel = $movieModel;
+        $this->movieModel = $movieModel;
     }
 
     /**
@@ -32,9 +32,8 @@ class MovieRepository implements MovieRespositoryInterface
      */
     public function getMovieGenres() : array
     {
-        
+        Log::channel('daily')->info('Fetching genres from DB.....');
         $movieGenres = DB::select('select distinct genres from movies');
         return $movieGenres;
     }
 }
-

@@ -33,10 +33,16 @@ Route::middleware('auth:api')->group(function () {
     
     Route::get('ratings/ages/{ageId}', 'Rating\RatingController@searchByAge')->middleware('scopes:ratings');
     
+    Route::get('ages', [ 'as' => 'ages', 'uses' => 'Age\AgeController@getAges'])->middleware('scopes:ages');
+    
     Route::get('ages/{ageId}', 'Age\AgeController@getAgeById')->middleware('scopes:ages');
     
     Route::get('movies/genres', 'Movie\MovieController@getMovieGenres')->middleware('scopes:movies');
     
+    Route::get('ratings/save', 'Rating\RatingController@saveNewRating')->middleware('scopes:ratings');
+    
     Route::get('ratings/paginated', 'Rating\RatingController@getPaginatedChartRecords')->middleware('scopes:ratings');
+    
+    Route::get('ratings/paginated/{page}', 'Rating\RatingController@getPaginatedChartRecords')->middleware('scopes:ratings');
 });
 

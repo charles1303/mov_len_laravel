@@ -2,6 +2,7 @@
 namespace Age\Services;
 
 use Age\Repositories\AgeRepositoryInterface;
+use Illuminate\Support\Facades\Cache;
 
 /**
  *
@@ -24,4 +25,19 @@ class AgeService
     {
         return $this->ageRepo->getAgeById($ageId);
     }
+    
+    /**
+     * Gets all Ages
+     *
+     * @return array
+     */
+    public function getAges() : array
+    {
+        $ages = Cache::remember('ages', env('MEMCACHED_DURATION_IN_MINUTES'), function () {
+            $resultSet = $this->ageRepo->getAges();
+            return $resultSet;
+        });
+        return $ages;
+    }
+   
 }

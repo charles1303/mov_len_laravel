@@ -34,9 +34,9 @@ class RatingsPassportTest extends TestCase
         $this->get('/api/ratings', $this->headers)
         ->assertStatus(200)
         ->assertJsonFragment([
-            "avg_rating" => "4.06",
-            "title" => "Persuasion (1995)",
-            "noOfRatings" => 200
+            "avg_rating" => "4.61",
+            "title" => "Sanjuro (1962)",
+            "noOfRatings" => 100
         ])
         ->assertJsonStructure([
             'status',

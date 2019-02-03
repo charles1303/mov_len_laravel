@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers\Movie;
 
@@ -10,17 +10,18 @@ class MovieController extends Controller
 {
     
     /**
-     * 
+     *
      * @var MovieService
      */
     protected $movieService;
     
-    public function __construct(MovieService $movieService){
+    public function __construct(MovieService $movieService)
+    {
         $this->movieService = $movieService;
-        
     }
     
-    public function getMovieGenres(Request $request){
+    public function getMovieGenres(Request $request)
+    {
         return response()->api($this->movieService->getMovieGenres());
     }
 }

@@ -5,7 +5,7 @@ namespace Age\Repositories;
 /**
  *
  * @author charles
- *        
+ *
  */
 interface AgeRepositoryInterface
 {
@@ -16,5 +16,11 @@ interface AgeRepositoryInterface
      * @return array
      */
     public function getAgeById(int $ageId) : object;
+    
+    /**
+     * Gets all Ages
+     *
+     * @return array
+     */
+    public function getAges() : array;
 }
-

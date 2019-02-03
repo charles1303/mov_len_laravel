@@ -7,7 +7,7 @@ use Movie\Services\MovieService;
 /**
  *
  * @author charles
- *        
+ *
  */
 class MovieServiceProvider extends ServiceProvider
 {
@@ -24,13 +24,10 @@ class MovieServiceProvider extends ServiceProvider
     
     public function register()
     {
-        
-        $this->app->bind('Movie\Services\MovieService', function($app)
-        {
+        $this->app->bind('Movie\Services\MovieService', function ($app) {
             return new MovieService(
                 $app->make('Movie\Repositories\MovieRepository')
                 );
         });
     }
 }
-

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace App\Http\Controllers\Rating;
 
 use Illuminate\Http\Request;
@@ -9,30 +9,30 @@ use Rating\Services\RatingsService;
 /**
  *
  * @author charles
- *        
+ *
  */
 class RatingController extends Controller
 {
 
     /**
-     * 
+     *
      * @var RatingsService
      */
-    protected $ratingService;   
+    protected $ratingService;
     public function __construct(RatingsService $ratingService)
     {
-        
         $this->ratingService = $ratingService;
     }
     
-    public function getPaginatedChartRecords(Request $request){
-        Log::channel('daily')->info('Loading paginated movie ratings from RatingController loadPaginatedChartRecords method....');
-        return response()->api($this->ratingService->getPaginatedChartRecords());
+    public function getPaginatedChartRecords(Request $request, int $page = 1)
+    {
+        Log::channel('daily')->info('Loading paginated movie ratings from RatingController loadPaginatedChartRecords method with page....' . $page);
+        return response()->api($this->ratingService->getPaginatedChartRecords($page));
     }
     
     public function getMovieRatings()
     {
-        Log::channel('daily')->info('Loading movie ratings from RatingController loadMovieRatings method....');
+        Log::channel('daily')->info('Loading movie ratings from RatingController getMovieRatings method....');
         return response()->api($this->ratingService->getMovieRatings());
     }
     
@@ -47,5 +47,9 @@ class RatingController extends Controller
         Log::channel('daily')->info('Search movie ratings from RatingController searchByGenre method by genre....' . $genre);
         return response()->api($this->ratingService->searchByGenre($genre));
     }
+    
+    public function saveNewRating()
+    {
+        return response()->api($this->ratingService->saveNewRatings());
+    }
 }
-

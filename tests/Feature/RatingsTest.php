@@ -52,9 +52,9 @@ class RatingsTest extends TestCase
         $this->get('/api/ratings/paginated', $this->headers)
             ->assertStatus(200)
             ->assertJsonFragment([
-            "avg_rating" => "4.06",
-            "title" => "Persuasion (1995)",
-            "noOfRatings" => 200
+            "avg_rating" => "4.61",
+            "title" => "Sanjuro (1962)",
+            "noOfRatings" => 100
         ])
             ->assertJsonStructure([
                 'status',
@@ -77,9 +77,9 @@ class RatingsTest extends TestCase
         $this->get('/api/ratings', $this->headers)
             ->assertStatus(200)
             ->assertJsonFragment([
-            "avg_rating" => "4.06",
-            "title" => "Persuasion (1995)",
-            "noOfRatings" => 200
+            "avg_rating" => "4.61",
+            "title" => "Sanjuro (1962)",
+            "noOfRatings" => 100
         ])
         ->assertJsonStructure([
             'status',
@@ -139,10 +139,10 @@ class RatingsTest extends TestCase
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer '.$token;
         $this->get('/api/ratings/ages/xx', $this->headers)
-        ->assertStatus(404)
+        ->assertStatus(500)
         ->assertExactJson([
-            "message" => "No records found",
-            "status" => 404,
+            "message" => "Whoops, looks like something went wrong",
+            "status" => 500,
             "data" => []
         ]);
     }

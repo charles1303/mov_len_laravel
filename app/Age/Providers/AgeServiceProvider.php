@@ -7,7 +7,7 @@ use Age\Services\AgeService;
 /**
  *
  * @author charles
- *        
+ *
  */
 class AgeServiceProvider extends ServiceProvider
 {
@@ -24,12 +24,10 @@ class AgeServiceProvider extends ServiceProvider
     
     public function register()
     {
-        $this->app->bind('Age\Services\AgeService', function($app)
-        {
+        $this->app->bind('Age\Services\AgeService', function ($app) {
             return new AgeService(
                 $app->make('Age\Repositories\AgeRepositoryInterface')
                 );
         });
     }
 }
-
