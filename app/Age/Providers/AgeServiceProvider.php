@@ -26,7 +26,8 @@ class AgeServiceProvider extends ServiceProvider
     {
         $this->app->bind('Age\Services\AgeService', function ($app) {
             return new AgeService(
-                $app->make('Age\Repositories\AgeRepositoryInterface')
+                $app->make('Age\Repositories\AgeRepositoryInterface'),
+                $app->make('App\Services\CacheServiceFactory')
                 );
         });
     }

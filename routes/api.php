@@ -25,7 +25,6 @@ Route::get('tokenRequest', [ 'as' => 'oauth', 'uses' => 'PassportController@toke
 
 Route::post('assignScope', [ 'as' => 'assignScope', 'uses' => 'PassportController@assignTokenScope']);
 
-
 Route::middleware('auth:api')->group(function () {
     Route::get('ratings', 'Rating\RatingController@getMovieRatings')->middleware('scopes:ratings');
     
@@ -45,4 +44,3 @@ Route::middleware('auth:api')->group(function () {
     
     Route::get('ratings/paginated/{page}', 'Rating\RatingController@getPaginatedChartRecords')->middleware('scopes:ratings');
 });
-

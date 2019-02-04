@@ -146,7 +146,7 @@ EOT;
      */
     public function getPaginatedChartRecords(int $page) : array
     {
-        Log::channel('daily')->info('Fetching getPaginatedChartRecords from DB.....');
+        Log::channel('daily')->info('Fetching getPaginatedChartRecords from DB.....page : ' . $page);
         $data = [];
         $pageSize = self::NUM_OF_RECS_PER_PAGE;
         $startIndex = ($page * self::NUM_OF_RECS_PER_PAGE) - self::NUM_OF_RECS_PER_PAGE;

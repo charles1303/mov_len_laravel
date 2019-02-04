@@ -2,6 +2,7 @@
 namespace Age\Services;
 
 use Age\Repositories\AgeRepositoryInterface;
+use App\Services\CacheServiceFactory;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -16,11 +17,23 @@ class AgeService
      */
     protected $ageRepo;
     
-    public function __construct(AgeRepositoryInterface $ageRepo)
+    /*
+     * @var CacheServiceFactory
+     */
+    protected $cacheServiceFactory;
+    
+    public function __construct(AgeRepositoryInterface $ageRepo, CacheServiceFactory $cacheServiceFactory)
     {
         $this->ageRepo = $ageRepo;
+        $this->cacheServiceFactory = $cacheServiceFactory;
     }
     
+    /**
+     * Gets age by age Id
+     *
+     * @param int $ageId
+     * @return object
+     */
     public function getAgeById(int $ageId) : object
     {
         return $this->ageRepo->getAgeById($ageId);
@@ -33,11 +46,8 @@ class AgeService
      */
     public function getAges() : array
     {
-        $ages = Cache::remember('ages', env('MEMCACHED_DURATION_IN_MINUTES'), function () {
-            $resultSet = $this->ageRepo->getAges();
-            return $resultSet;
-        });
-        return $ages;
+        $cacheService = $this->cacheServiceFactory->getCacheService();
+        
+        return $cacheService->get($this->ageRepo, 'getAges', 'ages');
     }
-   
 }

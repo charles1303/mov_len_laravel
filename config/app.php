@@ -7,6 +7,7 @@ use Movie\Providers\MovieRepositoryServiceProvider;
 use App\Providers\ResponseServiceProvider;
 use Rating\Providers\RatingsRepositoryServiceProvider;
 use Rating\Providers\RatingsServiceProvider;
+use App\Providers\CustomCacheServiceProvider;
 use Auth\Providers\ApiUserRepositoryServiceProvider;
 use Auth\Providers\ApiUserServiceProvider;
 use Laravel\Passport\PassportServiceProvider;
@@ -195,6 +196,7 @@ return [
         ResponseServiceProvider::class,
         ApiUserRepositoryServiceProvider::class,
         ApiUserServiceProvider::class,
+        CustomCacheServiceProvider::class,
         //App\Providers\CustomPassportServiceProvider::class
 
     ],

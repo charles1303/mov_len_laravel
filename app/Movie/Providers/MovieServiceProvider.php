@@ -26,7 +26,8 @@ class MovieServiceProvider extends ServiceProvider
     {
         $this->app->bind('Movie\Services\MovieService', function ($app) {
             return new MovieService(
-                $app->make('Movie\Repositories\MovieRepository')
+                $app->make('Movie\Repositories\MovieRepository'),
+                $app->make('App\Services\CacheServiceFactory')
                 );
         });
     }

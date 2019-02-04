@@ -27,7 +27,8 @@ class RatingsServiceProvider extends ServiceProvider
         $this->app->bind('Rating\Services\RatingsService', function ($app) {
             return new RatingsService(
                 
-                $app->make('Rating\Repositories\RatingsRepositoryInterface')
+                $app->make('Rating\Repositories\RatingsRepositoryInterface'),
+                $app->make('App\Services\CacheServiceFactory')
                 );
         });
     }

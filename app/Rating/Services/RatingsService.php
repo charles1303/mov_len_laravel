@@ -4,6 +4,7 @@ namespace Rating\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Rating\Repositories\RatingsRepositoryInterface;
+use App\Services\CacheServiceFactory;
 
 /**
  *
@@ -19,60 +20,55 @@ class RatingsService
      */
     protected $ratingsRepo;
     
-    public function __construct(RatingsRepositoryInterface $ratingsRepo)
+    /*
+     * @var CacheServiceFactory
+     */
+    protected $cacheServiceFactory;
+    
+    public function __construct(RatingsRepositoryInterface $ratingsRepo, CacheServiceFactory $cacheServiceFactory)
     {
         $this->ratingsRepo = $ratingsRepo;
+        $this->cacheServiceFactory = $cacheServiceFactory;
     }
     
     public function getPaginatedChartRecords(int $page) : array
     {
         Log::channel('daily')->info('Fetching paginated movie ratings from RatingsService getPaginatedChartRecords method 2 ....');
         
-        $ratings = Cache::get('paginated:records:' . $page, function () use ($page) {
-            $resultSet = $this->ratingsRepo->getPaginatedChartRecords($page);
-            $movieRatings =  $this->sortMovieRatings($resultSet);
-            Cache::put('paginated:records:' . $page, $movieRatings, env('MEMCACHED_DURATION_IN_MINUTES'));
-            return $movieRatings;
-        });
-        return $ratings;
+        $cacheService = $this->cacheServiceFactory->getCacheService();
+        $data =  $cacheService->get($this->ratingsRepo, 'getPaginatedChartRecords', 'paginated:records', $page);
+        $sortedData =  $this->sortMovieRatings($data);
+        return $sortedData;
     }
     
     public function getMovieRatings() : array
     {
         Log::channel('daily')->info('Fetching paginated movie ratings from RatingsService getMovieRatings method....');
         
-        $ratings = Cache::get('movie:ratings', function () {
-            $resultSet = $this->ratingsRepo->getMovieRatings();
-            $movieRatings =  $this->sortMovieRatings($resultSet);
-            Cache::put('movie:ratings', $movieRatings, env('MEMCACHED_DURATION_IN_MINUTES'));
-            return $movieRatings;
-        });
-        return $ratings;
+        $cacheService = $this->cacheServiceFactory->getCacheService();
+        $data =  $cacheService->get($this->ratingsRepo, 'getMovieRatings', 'movie:ratings');
+        $sortedData =  $this->sortMovieRatings($data);
+        return $sortedData;
     }
     
     public function searchByAge(int $ageId) : array
     {
         Log::channel('daily')->info('Fetching paginated movie ratings from RatingsService searchByAge method by age Id ' . $ageId);
         
-        $ratings = Cache::get('movie:ratings:'.$ageId, function () use ($ageId) {
-            $resultSet = $this->ratingsRepo->searchByAge($ageId);
-            $movieRatings =  $this->sortMovieRatings($resultSet);
-            Cache::put('movie:ratings:'.$ageId, $movieRatings, env('MEMCACHED_DURATION_IN_MINUTES'));
-            return $movieRatings;
-        });
-        return $ratings;
+        $cacheService = $this->cacheServiceFactory->getCacheService();
+        $data =  $cacheService->get($this->ratingsRepo, 'searchByAge', 'movie:ratings', $ageId);
+        $sortedData =  $this->sortMovieRatings($data);
+        return $sortedData;
     }
     
     public function searchByGenre(string $genre) : array
     {
         Log::channel('daily')->info('Fetching paginated movie ratings from RatingsService searchByGenre method by genre ' . $genre);
         
-        $ratings = Cache::remember('movie:ratings:'.$genre, env('MEMCACHED_DURATION_IN_MINUTES'), function () use ($genre) {
-            $resultSet = $this->ratingsRepo->searchByGenre($genre);
-            $movieRatings =  $this->sortMovieRatings($resultSet);
-            return $movieRatings;
-        });
-        return $ratings;
+        $cacheService = $this->cacheServiceFactory->getCacheService();
+        $data =  $cacheService->get($this->ratingsRepo, 'searchByGenre', 'movie:ratings', $genre);
+        $sortedData =  $this->sortMovieRatings($data);
+        return $sortedData;
     }
     
     public function saveNewRatings() : string

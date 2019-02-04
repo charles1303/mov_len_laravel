@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Movie\Services;
 
-use Illuminate\Support\Facades\Cache;
+use App\Services\CacheServiceFactory;
 use Movie\Repositories\MovieRespositoryInterface;
 
 /**
@@ -18,17 +18,25 @@ class MovieService
      */
     protected $movieRepo;
     
-    public function __construct(MovieRespositoryInterface $movieRepo)
+    /*
+     * @var CacheServiceFactory
+     */
+    protected $cacheServiceFactory;
+    
+    public function __construct(MovieRespositoryInterface $movieRepo, CacheServiceFactory $cacheServiceFactory)
     {
         $this->movieRepo = $movieRepo;
+        $this->cacheServiceFactory = $cacheServiceFactory;
     }
-    
+    /**
+     * Gets movie genres
+     *
+     * @return array
+     */
     public function getMovieGenres() : array
     {
-        $movies = Cache::remember('movies', env('MEMCACHED_DURATION_IN_MINUTES'), function () {
-            $resultSet = $this->movieRepo->getMovieGenres();
-            return $resultSet;
-        });
-        return $movies;
+        $cacheService = $this->cacheServiceFactory->getCacheService();
+        
+        return $cacheService->get($this->movieRepo, 'getMovieGenres', 'movies');
     }
 }
