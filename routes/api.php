@@ -38,7 +38,7 @@ Route::middleware('auth:api')->group(function () {
     
     Route::get('movies/genres', 'Movie\MovieController@getMovieGenres')->middleware('scopes:movies');
     
-    Route::get('ratings/save', 'Rating\RatingController@saveNewRating')->middleware('scopes:ratings');
+    Route::get('ratings/clear-cache', 'Rating\RatingController@clearCache')->middleware('scopes:ratings');
     
     Route::get('ratings/paginated', 'Rating\RatingController@getPaginatedChartRecords')->middleware('scopes:ratings');
     

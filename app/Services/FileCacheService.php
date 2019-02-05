@@ -52,4 +52,8 @@ class FileCacheService implements CacheServiceInterface
         });
         return $data;
     }
+    public function clearCache()
+    {
+        Cache::flush();
+    }
 }

@@ -31,4 +31,8 @@ class MemCacheService implements CacheServiceInterface
         });
         return $data;
     }
+    public function clearCache()
+    {
+        Cache::flush();
+    }
 }

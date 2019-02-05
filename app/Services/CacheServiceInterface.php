@@ -19,4 +19,9 @@ interface CacheServiceInterface
      * @return array
      */
     public function get(object $repository, string $repositoryMethodCall, string $cacheKey, $methodCallParams = null) : array;
+    
+    /**
+     * Clears all data from cache
+     */
+    public function clearCache();
 }

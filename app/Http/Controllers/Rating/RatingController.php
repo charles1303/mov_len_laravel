@@ -48,8 +48,8 @@ class RatingController extends Controller
         return response()->api($this->ratingService->searchByGenre($genre));
     }
     
-    public function saveNewRating()
+    public function clearCache()
     {
-        return response()->api($this->ratingService->saveNewRatings());
+        return response()->api($this->ratingService->clearCache());
     }
 }

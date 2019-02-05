@@ -71,11 +71,11 @@ class RatingsService
         return $sortedData;
     }
     
-    public function saveNewRatings() : string
+    public function clearCache() : string
     {
         Log::channel('daily')->info('Mimic Saving new ratings and flushing cache so as to update data retreived.....');
-        Cache::flush();
-        
+        $cacheService = $this->cacheServiceFactory->getCacheService();
+        $cacheService->clearCache();
         return 'Cache flushed and data refreshed';
     }
     

@@ -34,4 +34,8 @@ class RedisCacheService implements CacheServiceInterface
         }
         return $data;
     }
+    public function clearCache()
+    {
+        Redis::flushDB();
+    }
 }
