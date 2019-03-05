@@ -17,9 +17,9 @@ class RatingsRepository implements RatingsRepositoryInterface
     private const NUM_OF_RECS_PER_PAGE = 20;
 
     /**
-     * (non-PHPdoc)
      *
-     * @see \Rating\Repositories\RatingsRepositoryInterface::loadMovieRatings()
+     * {@inheritDoc}
+     * @see \Rating\Repositories\RatingsRepositoryInterface::getMovieRatings()
      */
     public function getMovieRatings() : array
     {
@@ -140,11 +140,11 @@ EOT;
     }
 
     /**
-     * (non-PHPdoc)
      *
-     * @see \Rating\Repositories\RatingsRepositoryInterface::loadPaginatedChartRecords()
+     * {@inheritDoc}
+     * @see \Rating\Repositories\RatingsRepositoryInterface::getPaginatedChartRecords()
      */
-    public function getPaginatedChartRecords(int $page) : array
+    public function getPaginatedChartRecords(int $page = 1) : array
     {
         Log::channel('daily')->info('Fetching getPaginatedChartRecords from DB.....page : ' . $page);
         $data = [];
@@ -175,7 +175,7 @@ EOT;
         return $data;
     }
 
-    private function prepareRatingsData(array $result) : array
+    public function prepareRatingsData(array $result) : array
     {
         $data = [];
         try {

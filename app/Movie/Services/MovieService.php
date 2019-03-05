@@ -1,42 +1,36 @@
 <?php declare(strict_types=1);
 namespace Movie\Services;
 
-use App\Services\CacheServiceFactory;
-use Movie\Repositories\MovieRespositoryInterface;
+use App\Movie\Services\MovieServiceInterface;
+use Movie\Repositories\MovieRepositoryInterface;
 
 /**
  *
  * @author charles
  *
  */
-class MovieService
+class MovieService implements MovieServiceInterface
 {
 
     /**
      *
-     * @var MovieRespositoryInterface
+     * @var MovieRepositoryInterface
      */
     protected $movieRepo;
     
-    /*
-     * @var CacheServiceFactory
-     */
-    protected $cacheServiceFactory;
     
-    public function __construct(MovieRespositoryInterface $movieRepo, CacheServiceFactory $cacheServiceFactory)
+    public function __construct(MovieRepositoryInterface $movieRepo)
     {
         $this->movieRepo = $movieRepo;
-        $this->cacheServiceFactory = $cacheServiceFactory;
     }
+    
     /**
-     * Gets movie genres
      *
-     * @return array
+     * {@inheritDoc}
+     * @see \App\Movie\Services\MovieServiceInterface::getMovieGenres()
      */
     public function getMovieGenres() : array
     {
-        $cacheService = $this->cacheServiceFactory->getCacheService();
-        
-        return $cacheService->get($this->movieRepo, 'getMovieGenres', 'movies');
+        return $this->movieRepo->getMovieGenres();
     }
 }

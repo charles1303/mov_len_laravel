@@ -46,7 +46,7 @@ class TokenScopeTest extends TestCase
         
         $token = $this->apiUserService->generateToken($this->user, 'TestToken', [$tokenScope->name]);
         
-        $this->assertTrue($this->arrays_are_similar($token->token->scopes, [$tokenScope->name]));
+        $this->assertTrue($token->token->scopes == [$tokenScope->name]);
     }
     
     private function arrays_are_similar($firstArray, $secondArray)

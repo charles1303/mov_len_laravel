@@ -9,19 +9,23 @@ namespace App\Services;
 interface CacheServiceInterface
 {
     /**
-     * Gets data from cache if key exists else
-     * pulls from database and stores in cache
-     * for future reference
-     *
-     * @param object $repository
-     * @param string $repositoryMethodCall
-     * @param string $cacheKey
-     * @return array
-     */
-    public function get(object $repository, string $repositoryMethodCall, string $cacheKey, $methodCallParams = null) : array;
-    
-    /**
      * Clears all data from cache
      */
     public function clearCache();
+    
+    /**
+     * Gets data from cache 
+     * 
+     * @param string $cacheKey
+     * @return array
+     */
+    public function get(string $cacheKey) : ?array;
+    
+    /**
+     * Adds data to cache
+     * 
+     * @param string $cacheKey
+     * @param object $value
+     */
+    public function put(string $cacheKey, array $value);
 }

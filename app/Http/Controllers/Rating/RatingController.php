@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 namespace App\Http\Controllers\Rating;
 
+use App\Http\Controllers\Controller;
+use App\Rating\Services\RatingsServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use Rating\Services\RatingsService;
 
 /**
  *
@@ -16,10 +16,10 @@ class RatingController extends Controller
 
     /**
      *
-     * @var RatingsService
+     * @var RatingsServiceInterface
      */
     protected $ratingService;
-    public function __construct(RatingsService $ratingService)
+    public function __construct(RatingsServiceInterface $ratingService)
     {
         $this->ratingService = $ratingService;
     }
@@ -50,6 +50,6 @@ class RatingController extends Controller
     
     public function clearCache()
     {
-        return response()->api($this->ratingService->clearCache());
+        return response()->api($this->ratingService->save());
     }
 }

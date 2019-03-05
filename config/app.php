@@ -2,15 +2,16 @@
 
 use Age\Providers\AgeRepositoryServiceProvider;
 use Age\Providers\AgeServiceProvider;
-use Movie\Providers\MovieServiceProvider;
-use Movie\Providers\MovieRepositoryServiceProvider;
-use App\Providers\ResponseServiceProvider;
-use Rating\Providers\RatingsRepositoryServiceProvider;
-use Rating\Providers\RatingsServiceProvider;
 use App\Providers\CustomCacheServiceProvider;
+use App\Providers\ResponseServiceProvider;
 use Auth\Providers\ApiUserRepositoryServiceProvider;
 use Auth\Providers\ApiUserServiceProvider;
 use Laravel\Passport\PassportServiceProvider;
+use Movie\Providers\MovieRepositoryServiceProvider;
+use Movie\Providers\MovieServiceProvider;
+use Rating\Providers\RatingsRepositoryServiceProvider;
+use Rating\Providers\RatingsServiceProvider;
+use Rapide\LaravelQueueKafka\LaravelQueueKafkaServiceProvider;
 
 return [
 
@@ -174,6 +175,9 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         PassportServiceProvider::class,
+        LaravelQueueKafkaServiceProvider::class,
+        Superbalist\LaravelPubSub\PubSubServiceProvider::class,
+        
 
         /*
          * Package Service Providers...
@@ -197,6 +201,7 @@ return [
         ApiUserRepositoryServiceProvider::class,
         ApiUserServiceProvider::class,
         CustomCacheServiceProvider::class,
+        //ConsumerQueueServiceProvider::class,
         //App\Providers\CustomPassportServiceProvider::class
 
     ],
@@ -247,6 +252,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'PubSub' => Superbalist\LaravelPubSub\PubSubFacade::class,
 
     ],
 

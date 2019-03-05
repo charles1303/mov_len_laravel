@@ -2,13 +2,14 @@
 namespace Auth\Services;
 
 use App\Auth\Models\ApiUser;
-use App\Auth\Models\TokenScope;
-use Auth\Repositories\ApiUserRepositoryInterface;
-use Illuminate\Support\Facades\Hash;
-use Auth\Pojos\ApiUserPojo;
-use Exceptions\NoRecordFoundException;
 use App\Auth\Models\ApiUserTokenScope;
+use App\Auth\Models\TokenScope;
+use Auth\Dto\ApiUserDto;
+use Auth\Repositories\ApiUserRepositoryInterface;
+use Exceptions\NoRecordFoundException;
+use function GuzzleHttp\json_decode;
 use function GuzzleHttp\json_encode;
+use Illuminate\Support\Facades\Hash;
 
 /**
  *
@@ -28,11 +29,11 @@ class ApiUserService
         $this->apiUserRepo = $apiUserRepo;
     }
     
-    public function registerUser(ApiUserPojo $apiUserPojo) : ?ApiUser{
+    public function registerUser(ApiUserDto $apiUserDto) : ?ApiUser{
         $apiUser = ApiUser::create([
-            'name' => $apiUserPojo->name,
-            'email' => $apiUserPojo->email,
-            'password' => Hash::make($apiUserPojo->password)
+            'name' => $apiUserDto->name,
+            'email' => $apiUserDto->email,
+            'password' => Hash::make($apiUserDto->password)
         ]);
         
         return $apiUser;

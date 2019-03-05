@@ -10,5 +10,12 @@ class Age extends Model
     /**
      * @var string
      */
-    protected $title;
+    public $title;
+    
+    /**
+     * @var int
+     */
+    public $age;
+    
+    protected $fillable = ['title', 'age'];
 }

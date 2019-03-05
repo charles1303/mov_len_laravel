@@ -1,17 +1,16 @@
 <?php declare(strict_types=1);
 namespace Rating\Services;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Rating\Repositories\RatingsRepositoryInterface;
-use App\Services\CacheServiceFactory;
+use App\Rating\Services\RatingsServiceInterface;
 
 /**
  *
  * @author charles
  *
  */
-class RatingsService
+class RatingsService implements RatingsServiceInterface
 {
 
     /**
@@ -20,65 +19,84 @@ class RatingsService
      */
     protected $ratingsRepo;
     
-    /*
-     * @var CacheServiceFactory
-     */
-    protected $cacheServiceFactory;
     
-    public function __construct(RatingsRepositoryInterface $ratingsRepo, CacheServiceFactory $cacheServiceFactory)
+    public function __construct(RatingsRepositoryInterface $ratingsRepo)
     {
         $this->ratingsRepo = $ratingsRepo;
-        $this->cacheServiceFactory = $cacheServiceFactory;
     }
     
-    public function getPaginatedChartRecords(int $page) : array
+    /**
+     *
+     * {@inheritDoc}
+     * @see \App\Rating\Services\RatingsServiceInterface::getPaginatedChartRecords()
+     */
+    public function getPaginatedChartRecords(int $page = 1) : array
     {
         Log::channel('daily')->info('Fetching paginated movie ratings from RatingsService getPaginatedChartRecords method 2 ....');
         
-        $cacheService = $this->cacheServiceFactory->getCacheService();
-        $data =  $cacheService->get($this->ratingsRepo, 'getPaginatedChartRecords', 'paginated:records', $page);
+        $data =  $this->ratingsRepo->getPaginatedChartRecords();
         $sortedData =  $this->sortMovieRatings($data);
         return $sortedData;
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \App\Rating\Services\RatingsServiceInterface::getMovieRatings()
+     */
     public function getMovieRatings() : array
     {
         Log::channel('daily')->info('Fetching paginated movie ratings from RatingsService getMovieRatings method....');
         
-        $cacheService = $this->cacheServiceFactory->getCacheService();
-        $data =  $cacheService->get($this->ratingsRepo, 'getMovieRatings', 'movie:ratings');
+        $data =  $this->ratingsRepo->getMovieRatings();
         $sortedData =  $this->sortMovieRatings($data);
         return $sortedData;
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \App\Rating\Services\RatingsServiceInterface::searchByAge()
+     */
     public function searchByAge(int $ageId) : array
     {
         Log::channel('daily')->info('Fetching paginated movie ratings from RatingsService searchByAge method by age Id ' . $ageId);
         
-        $cacheService = $this->cacheServiceFactory->getCacheService();
-        $data =  $cacheService->get($this->ratingsRepo, 'searchByAge', 'movie:ratings', $ageId);
+        $data = $this->ratingsRepo->searchByAge($ageId);
         $sortedData =  $this->sortMovieRatings($data);
         return $sortedData;
     }
     
+    /**
+     *
+     * {@inheritDoc}
+     * @see \App\Rating\Services\RatingsServiceInterface::searchByGenre()
+     */
     public function searchByGenre(string $genre) : array
     {
         Log::channel('daily')->info('Fetching paginated movie ratings from RatingsService searchByGenre method by genre ' . $genre);
         
-        $cacheService = $this->cacheServiceFactory->getCacheService();
-        $data =  $cacheService->get($this->ratingsRepo, 'searchByGenre', 'movie:ratings', $genre);
+        $data =  $this->ratingsRepo->searchByGenre($genre);
         $sortedData =  $this->sortMovieRatings($data);
         return $sortedData;
     }
     
-    public function clearCache() : string
+    /**
+     *
+     * {@inheritDoc}
+     * @see \App\Rating\Services\RatingsServiceInterface::save()
+     */
+    public function save() : string
     {
-        Log::channel('daily')->info('Mimic Saving new ratings and flushing cache so as to update data retreived.....');
-        $cacheService = $this->cacheServiceFactory->getCacheService();
-        $cacheService->clearCache();
         return 'Cache flushed and data refreshed';
     }
     
+    /**
+     * Sorts movie ratings by no of ratings per movie
+     *
+     * @param array $movieRatings
+     * @return array
+     */
     public function sortMovieRatings(array $movieRatings) : array
     {
         Log::channel('daily')->info('Sorting movie ratings from RatingsService sortMovieRatings method....size ' .count($movieRatings));

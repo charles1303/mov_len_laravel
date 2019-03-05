@@ -22,17 +22,18 @@ class MemCacheService implements CacheServiceInterface
      *
      * @see \App\Services\CacheServiceInterface::get()
      */
-    public function get(object $repository, string $repositoryMethodCall, string $cacheKey, $methodCallParams = null) : array
-    {
-        $key = $methodCallParams == null ? $cacheKey : $cacheKey .':'. $methodCallParams;
-        $data = Cache::remember($key, env('CACHE_KEY_EXPIRY_DURATION_IN_MINUTES'), function () use ($repository, $repositoryMethodCall, $methodCallParams, $key) {
-            $resultSet = call_user_func(array($repository, $repositoryMethodCall), $methodCallParams);
-            return $resultSet;
-        });
-        return $data;
-    }
     public function clearCache()
     {
         Cache::flush();
+    }
+    
+    public function get(string $cacheKey) : array
+    {
+        return Cache::get($cacheKey);
+    }
+    
+    public function put(string $cacheKey, array $value)
+    {
+        Cache::put($cacheKey, $value, env('CACHE_KEY_EXPIRY_DURATION_IN_MINUTES'));
     }
 }

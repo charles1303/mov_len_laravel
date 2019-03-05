@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Movie;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Movie\Services\MovieService;
+use App\Movie\Services\MovieServiceInterface;
+use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
     
     /**
      *
-     * @var MovieService
+     * @var MovieServiceInterface
      */
     protected $movieService;
     
-    public function __construct(MovieService $movieService)
+    public function __construct(MovieServiceInterface $movieService)
     {
         $this->movieService = $movieService;
     }

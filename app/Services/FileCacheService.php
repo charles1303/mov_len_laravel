@@ -11,31 +11,9 @@ use Illuminate\Support\Facades\Cache;
 class FileCacheService implements CacheServiceInterface
 {
 
-    /**
-     */
-    public function __construct()
+    public function put(string $cacheKey, array $value)
     {
-    }
-    
-    /**
-     * Gets data from cache if key exists else
-     * pulls from database and stores in cache
-     * for future reference
-     *
-     * @param object $repository
-     * @param string $repositoryMethodCall
-     * @param string $cacheKey
-     * @return array
-     */
-    public function getPut(object $repository, string $repositoryMethodCall, string $cacheKey, $methodCallParams = null) : array
-    {
-        $key = $methodCallParams == null ? $cacheKey : $cacheKey . ':' . $methodCallParams;
-        $data = Cache::get($key, function () use ($repository, $repositoryMethodCall, $methodCallParams, $key) {
-            $resultSet = call_user_func(array($repository, $repositoryMethodCall), $methodCallParams);
-            Cache::put($key, $resultSet, env('CACHE_KEY_EXPIRY_DURATION_IN_MINUTES'));
-            return $resultSet;
-        });
-        return $data;
+        Cache::put($cacheKey, $value, env('CACHE_KEY_EXPIRY_DURATION_IN_MINUTES'));
     }
       
     /**
@@ -43,15 +21,12 @@ class FileCacheService implements CacheServiceInterface
      *
      * @see \App\Services\CacheServiceInterface::get()
      */
-    public function get(object $repository, string $repositoryMethodCall, string $cacheKey, $methodCallParams = null) : array
+    public function get(string $cacheKey) : ?array
     {
-        $key = $methodCallParams == null ? $cacheKey : $cacheKey .':'. $methodCallParams;
-        $data = Cache::remember($key, env('CACHE_KEY_EXPIRY_DURATION_IN_MINUTES'), function () use ($repository, $repositoryMethodCall, $methodCallParams, $key) {
-            $resultSet = call_user_func(array($repository, $repositoryMethodCall), $methodCallParams);
-            return $resultSet;
-        });
-        return $data;
+        return Cache::get($cacheKey);
+        
     }
+    
     public function clearCache()
     {
         Cache::flush();

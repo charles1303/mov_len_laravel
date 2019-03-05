@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
-namespace Auth\Pojos;
+namespace Auth\Dto;
 
 /**
  *
  * @author charles
  *        
  */
-class ApiUserPojo
+class ApiUserDto
 {
 
     public $name;
@@ -17,8 +17,5 @@ class ApiUserPojo
     
     public $scopes;
     
-    
-    public function __construct()
-    {}
 }
 

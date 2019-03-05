@@ -3,6 +3,9 @@ namespace Rating\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Rating\Services\RatingsService;
+use App\Rating\Services\RatingsServiceCacheProxy;
+use App\Rating\Services\RatingsServiceInterface;
+use App\Http\Controllers\Rating\RatingController;
 
 /**
  *
@@ -26,10 +29,16 @@ class RatingsServiceProvider extends ServiceProvider
     {
         $this->app->bind('Rating\Services\RatingsService', function ($app) {
             return new RatingsService(
-                
-                $app->make('Rating\Repositories\RatingsRepositoryInterface'),
-                $app->make('App\Services\CacheServiceFactory')
+                $app->make('Rating\Repositories\RatingsRepositoryInterface')
                 );
         });
+        
+        $this->app->when(RatingsServiceCacheProxy::class)
+        ->needs(RatingsServiceInterface::class)
+        ->give(RatingsService::class);
+        
+        $this->app->when(RatingController::class)
+        ->needs(RatingsServiceInterface::class)
+        ->give(RatingsServiceCacheProxy::class);
     }
 }

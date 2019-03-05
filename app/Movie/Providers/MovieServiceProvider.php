@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 namespace Movie\Providers;
 
+use App\Http\Controllers\Movie\MovieController;
+use App\Movie\Services\MovieServiceCacheProxy;
+use App\Movie\Services\MovieServiceInterface;
 use Illuminate\Support\ServiceProvider;
 use Movie\Services\MovieService;
 
@@ -26,9 +29,16 @@ class MovieServiceProvider extends ServiceProvider
     {
         $this->app->bind('Movie\Services\MovieService', function ($app) {
             return new MovieService(
-                $app->make('Movie\Repositories\MovieRepository'),
-                $app->make('App\Services\CacheServiceFactory')
+                $app->make('Movie\Repositories\MovieRepositoryInterface')
                 );
         });
+        
+        $this->app->when(MovieServiceCacheProxy::class)
+            ->needs(MovieServiceInterface::class)
+            ->give(MovieService::class);
+            
+        $this->app->when(MovieController::class)
+            ->needs(MovieServiceInterface::class)
+            ->give(MovieServiceCacheProxy::class);
     }
 }

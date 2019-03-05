@@ -5,7 +5,6 @@ namespace Age\Repositories;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use stdClass;
 use Exceptions\NoRecordFoundException;
 
 /**
@@ -53,25 +52,5 @@ class AgeRepository implements AgeRepositoryInterface
             throw new NoRecordFoundException("No records found");
         }
         return $ages;
-    }
-    
-    
-    /**
-     * Converts Eloquent object to standard class
-     *
-     * @param mixed $age
-     * @return NULL|\stdClass
-     */
-    protected function convertFormat(int $age) : object
-    {
-        if ($age == null) {
-            return null;
-        }
-        
-        $object = new stdClass();
-        $object->id = $age->id;
-        $object->title = $age->title;
-        
-        return $object;
     }
 }

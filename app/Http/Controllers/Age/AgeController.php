@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers\Age;
 
-use Illuminate\Http\Request;
+use App\Age\Services\AgeServiceCacheProxy;
 use App\Http\Controllers\Controller;
-use Age\Services\AgeService;
+use Illuminate\Http\Request;
 
 class AgeController extends Controller
 {
     /**
      *
-     * @var AgeService
+     * @var AgeServiceCacheProxy
      */
-    protected $ageService;
+    protected $ageServiceCacheProxy;
     
-    public function __construct(AgeService $ageService)
+    public function __construct(AgeServiceCacheProxy $ageServiceCacheProxy)
     {
-        $this->ageService = $ageService;
+        $this->ageServiceCacheProxy = $ageServiceCacheProxy;
     }
     
     public function getAgeById(Request $request, int $ageId)
     {
-        return response()->api($this->ageService->getAgeById($ageId));
+        return response()->api($this->ageServiceCacheProxy->getAgeById($ageId));
     }
     
     public function getAges(Request $request)
     {
-        return response()->api($this->ageService->getAges());
+        return response()->api($this->ageServiceCacheProxy->getAges());
     }
+    
 }

@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Movie\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Movie\Models\Movie;
@@ -11,7 +10,7 @@ use Movie\Models\Movie;
  * @author charles
  *
  */
-class MovieRepository implements MovieRespositoryInterface
+class MovieRepository implements MovieRepositoryInterface
 {
     
     /**
@@ -28,7 +27,7 @@ class MovieRepository implements MovieRespositoryInterface
     /**
      * (non-PHPdoc)
      *
-     * @see \Movie\Repositories\MovieRespositoryInterface::getMovieGenres()
+     * @see \Movie\Repositories\MovieRepositoryInterface::getMovieGenres()
      */
     public function getMovieGenres() : array
     {

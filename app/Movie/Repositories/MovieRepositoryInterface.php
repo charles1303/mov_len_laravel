@@ -6,7 +6,7 @@ namespace Movie\Repositories;
  * @author charles
  *
  */
-interface MovieRespositoryInterface
+interface MovieRepositoryInterface
 {
     public function getMovieGenres() : array;
 }

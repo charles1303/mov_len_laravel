@@ -17,25 +17,22 @@ class RedisCacheService implements CacheServiceInterface
     {
     }
     
-    /**
-     * (non-PHPdoc)
-     *
-     * @see \App\Services\CacheServiceInterface::get()
-     */
-    public function get(object $repository, string $repositoryMethodCall, string $cacheKey, $methodCallParams = null) : array
+    public function get(string $cacheKey) : ?array
     {
-        $key = $methodCallParams == null ? $cacheKey : $cacheKey . ':' . $methodCallParams;
-        $data = Redis::get($key);
+        $data = Redis::get($cacheKey);
         if ($data) {
-            return json_decode($data);
-        } else {
-            $data = call_user_func(array($repository, $repositoryMethodCall), $methodCallParams);
-            Redis::set($key, json_encode($data), 'EX', (env('CACHE_KEY_EXPIRY_DURATION_IN_MINUTES') * self::SECONDS_PER_MINUTE));
+            $data = json_decode($data);
         }
         return $data;
     }
+    
     public function clearCache()
     {
         Redis::flushDB();
+    }
+    
+    public function put(string $cacheKey, array $value)
+    {
+        Redis::set($cacheKey, json_encode($value), 'EX', (env('CACHE_KEY_EXPIRY_DURATION_IN_MINUTES') * self::SECONDS_PER_MINUTE));
     }
 }

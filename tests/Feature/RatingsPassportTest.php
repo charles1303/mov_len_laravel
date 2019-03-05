@@ -50,17 +50,4 @@ class RatingsPassportTest extends TestCase
             ]
         ]);
     }
-    
-    public function arrays_are_similar($firstArray, $secondArray)
-    {
-        if (count(array_diff_assoc($firstArray, $secondArray))) {
-            return false;
-        }
-        foreach ($firstArray as $key => $val) {
-            if ($val !== $secondArray[$key]) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
